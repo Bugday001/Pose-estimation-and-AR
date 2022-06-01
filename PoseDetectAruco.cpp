@@ -2,6 +2,7 @@
 #include<iostream>
 #include<opencv2/opencv.hpp>
 #include <opencv2/aruco.hpp>
+#include "PoseEstimation.h"
 
 using namespace cv;
 using namespace std;
@@ -55,11 +56,21 @@ int detectPoseShow()
         cv::aruco::estimatePoseSingleMarkers(corners, 0.053, cameraMatrix,
             distCoeffs, rvecs, tvecs);
 
+        //
+        std::vector<cv::Vec3d> rvecs2;
+        std::vector<cv::Vec3d> tvecs2;
+        estimatePose(corners, 0.0053, cameraMatrix,
+            distCoeffs, rvecs2, tvecs2);
+
         // step 3: 绘制坐标轴并进行可视化显示
-        for (int i = 0; i < rvecs.size(); i++) {
-            cv::aruco::drawAxis(test_image, cameraMatrix, distCoeffs, rvecs[i],
-                tvecs[i], 0.02);
+        for (int i = 0; i < rvecs2.size(); i++) {
+            cv::aruco::drawAxis(test_image, cameraMatrix, distCoeffs, rvecs2[i],
+                tvecs2[i], 0.2);
         }
+        //for (int i = 0; i < rvecs.size(); i++) {
+        //    cv::aruco::drawAxis(test_image, cameraMatrix, distCoeffs, rvecs[i],
+        //        tvecs[i], 0.02);
+        //}
         namedWindow("pose", WINDOW_AUTOSIZE);
         cv::imshow("pose", test_image);
 
