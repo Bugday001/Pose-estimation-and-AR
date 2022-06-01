@@ -1,5 +1,6 @@
 .vs
-ChessboradImages
+ChessboardImages
 x64
 *.yml
 *.vcxproj*
+.gitignore
