@@ -6,8 +6,8 @@
  *   @param corners 4个点的x，y
  *   @param cameraMatrix 相机内参
 */
-void estimatePose(ArrayofArray corners, float markerLength, 
-                    cv::Mat cameraMatrix, cv::Mat distCoeffs, Array3d &rvecs, Array3d &tvecs)
+void estimatePose(ArrayofArray corners, float markerLength, cv::Mat cameraMatrix, 
+                cv::Mat distCoeffs, Array3d &rvecs, Array3d &tvecs, cv::Mat R)
 {
     //假设一个顶点为(0,0)
     float half_length = markerLength / 2;
@@ -43,7 +43,7 @@ void estimatePose(ArrayofArray corners, float markerLength,
         //归一，使画出来的轴在合适的大小
         normalize(M.col(2), tvec, 1.0, 0.0, cv::NORM_INF);
         tvecs.push_back(tvec);
-        cv::Mat R(3, 3, CV_64F);
+        //cv::Mat R(3, 3, CV_64F);
         for (int i = 0; i < 3; i++)
         {
             R.at<double>(i, 0) = c1.at<double>(i, 0);

@@ -5,6 +5,7 @@
 #include "PoseDetectAruco.h"
 #include "SomeCameraFuction.h"
 #include "HarrisCorner.h"
+#include "stl_visualize.h"
 
 using namespace cv;
 using namespace std;
@@ -89,9 +90,13 @@ int main(int argc, char **argv) {
 	//testDisplayCameraRealTime();
 	//testSaveCameraImages();
 	// Aruco Pose Opencv
-	detectPoseShow();
+	//detectPoseShow();
 	//CornerDetect();
-
+	//stl_visual();
+	//read stl
+	ReadSTLFile STL;
+	STL.ReadFile("img/huosai.STL");
+	detectPoseShow(STL);
 	system("pause");
 	return 0;
 }
