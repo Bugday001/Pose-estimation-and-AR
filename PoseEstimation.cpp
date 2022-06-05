@@ -7,14 +7,15 @@
  *   @param cameraMatrix 相机内参
 */
 void estimatePose(ArrayofArray corners, float markerLength, cv::Mat cameraMatrix, 
-                cv::Mat distCoeffs, Array3d &rvecs, Array3d &tvecs, cv::Mat R)
+                cv::Mat distCoeffs, Array3d &rvecs, Array3d &tvecs, cv::Mat& R)
 {
     //假设一个顶点为(0,0)
     float half_length = markerLength / 2;
     std::vector<cv::Point2f> uv{ cv::Point2f(0,0),cv::Point2f(0,markerLength),
                                     cv::Point2f(markerLength,markerLength),cv::Point2f(markerLength,0) };
-    std::vector<cv::Point3d> uv3d{ cv::Point3d(-half_length,half_length,0),cv::Point3d(half_length,half_length,0),
-                                    cv::Point3d(half_length,-half_length,0),cv::Point3d(-half_length,-half_length,0) };
+    //PNP法使用
+    /*std::vector<cv::Point3d> uv3d{ cv::Point3d(-half_length,half_length,0),cv::Point3d(half_length,half_length,0),
+                                    cv::Point3d(half_length,-half_length,0),cv::Point3d(-half_length,-half_length,0) };*/
     for (int i = 0; i < corners.size(); i++) {
         /*
         *PNP
@@ -62,6 +63,10 @@ void estimatePose(ArrayofArray corners, float markerLength, cv::Mat cameraMatrix
     }
 }
 
+
+/*
+*得到单应矩阵
+*/
 cv::Mat HomographyMat(ArrayPoint2f src, ArrayPoint2f dst)
 {
     const int N = src.size();

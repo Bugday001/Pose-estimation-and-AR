@@ -92,7 +92,6 @@ int main(int argc, char **argv) {
 	// Aruco Pose Opencv
 	//detectPoseShow();
 	//CornerDetect();
-	//stl_visual();
 	//read stl
 	ReadSTLFile STL;
 	STL.ReadFile("img/huosai.STL");

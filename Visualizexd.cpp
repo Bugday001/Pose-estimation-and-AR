@@ -23,7 +23,7 @@ void Visualize2d(Mat& test_image, Mat new_image, ArrayofArray corners)
 	new_image_box[2] = Point(width, height);
 	new_image_box[3] = Point(0, height);
 	//计算从替换图像到目标ROI图像的3x3单应性矩阵
-	Mat H = findHomography(new_image_box, roi_box_pt);
+	Mat H = HomographyMat(new_image_box, roi_box_pt);
 	Mat roi_new_image;
 	//进行透视变换
 	warpPerspective(new_image, roi_new_image, H, test_image.size(), INTER_CUBIC);
@@ -122,12 +122,11 @@ void Visualize2d_plus(Mat& test_image, Mat new_image, Mat cameraMatrix,
 * 立体显示stl模型
 */
 void Visualize3d(Mat& test_image, Mat model, Mat cameraMatrix,
-	Mat distCoeffs, vector<cv::Vec3d> rvec, vector<cv::Vec3d> tvec, Mat R)
+	Mat distCoeffs, vector<cv::Vec3d> tvec, Mat R)
 {
-	float ratio = 300;
+	float ratio = 200;
 
-	//vector<Point2f> roi_box_pt(4);
-	//projectPoints(objectPoints, rvec, tvec, cameraMatrix, distCoeffs, roi_box_pt);
+	//变换3f=>2f
 	Mat tmpM = Mat::zeros(3, 4, CV_32F), M, tmpMat, Zero1 = (Mat_<double>(1, 4) << 0, 0, 0, 1);
 	//合并R,t
 	hconcat(R, Mat(tvec[0]), tmpM);
@@ -139,8 +138,8 @@ void Visualize3d(Mat& test_image, Mat model, Mat cameraMatrix,
 		0, 1, 0, 0,
 		0, 0, 1, 0);
 	Mat roi_box_pt = cameraMatrix * K1 * M * points;
-	//cout << roi_box_pt << endl;
-	//Mat转point2f，归一使每组坐标后一个元素为1，按此比例调整坐标值
+
+	//Mat转point2i，归一使每组坐标后一个元素为1，按此比例调整坐标值
 	vector<cv::Point2i> dst;
 	vector<vector<cv::Point2i>> dsts;
 	cv::Point2i p;
@@ -158,12 +157,5 @@ void Visualize3d(Mat& test_image, Mat model, Mat cameraMatrix,
 		}
 	}
 	//绘制上去
-	
-	dsts.push_back(dst);
-	//for (int i = 0; i < dst.size(); i++) {
-	//	circle(test_image, dst[i], 5, cv::Scalar(0, 255, 0), 2);
-	//}
-	
-	fillPoly(test_image, dsts, Scalar(255, 255, 255));
-	cout << "ok" << endl;
+	polylines(test_image, dsts, 0, Scalar(255, 255, 255));
 }

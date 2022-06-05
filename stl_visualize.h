@@ -9,7 +9,6 @@
 
 using namespace std;
 using namespace cv;
-int stl_visual();
 
 
 class ReadSTLFile
@@ -22,7 +21,7 @@ public:
     Mat Point_mat;
 private:
     unsigned int unTriangles;
-    bool ReadASCII(const char* cfilename);
+    //bool ReadASCII(const char* cfilename);
     bool ReadBinary(const char* cfilename);
 
     char* memwriter;

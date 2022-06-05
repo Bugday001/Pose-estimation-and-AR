@@ -49,9 +49,10 @@ int detectPoseShow(ReadSTLFile STL)
         cv::aruco::drawDetectedMarkers(test_image, corners, ids,
             cv::Scalar(0, 255, 0));
 
-        std::vector<cv::Vec3d> rvecs;
-        std::vector<cv::Vec3d> tvecs;
+
         // 姿态检算,opencv函数
+        //std::vector<cv::Vec3d> rvecs;
+        //std::vector<cv::Vec3d> tvecs;
         //cv::aruco::estimatePoseSingleMarkers(corners, 0.053, cameraMatrix,
         //    distCoeffs, rvecs, tvecs);
         //for (int i = 0; i < rvecs.size(); i++) {
@@ -60,7 +61,7 @@ int detectPoseShow(ReadSTLFile STL)
         //}
         //
 
-        // 姿态检算,自己实现
+        // 姿态检算,自己实现，目前只能容纳一个R，待改进
         std::vector<cv::Vec3d> rvecs2;
         std::vector<cv::Vec3d> tvecs2;
         cv::Mat R(3, 3, CV_64F);
@@ -71,17 +72,17 @@ int detectPoseShow(ReadSTLFile STL)
         //    cv::aruco::drawAxis(test_image, cameraMatrix, distCoeffs, rvecs2[i],
         //        tvecs2[i], 0.2);
         //}
-        //或者进行图像替换
+
+        //或者进行图像/3D模型显示
         for (int i = 0; i < rvecs2.size(); i++) {
             //Visualize2d(test_image, new_image, corners);
             //Visualize2d_plus(test_image, new_image, cameraMatrix, distCoeffs, rvecs2, tvecs2, R);
-            Visualize3d(test_image, STL.Point_mat, cameraMatrix, distCoeffs, rvecs2, tvecs2, R);
-            break;
+            Visualize3d(test_image, STL.Point_mat, cameraMatrix, distCoeffs, tvecs2, R);
         }
         
         namedWindow("pose", WINDOW_AUTOSIZE);
         cv::imshow("pose", test_image);
-        waitKey(20);//延时20ms
+        waitKey(1);//延时20ms
     }
 
 
