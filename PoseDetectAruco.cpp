@@ -23,7 +23,7 @@ int detectPoseShow(ReadSTLFile STL)
 
     // step 2: 对标记图像都进行aruco标记的检测以及姿态估计
         //1.从摄像头读入视频
-    VideoCapture capture(0);
+    VideoCapture capture(1);
     if (!capture.isOpened()) {
         std::cout << "无法开启摄像头！" << std::endl;
         return -1;

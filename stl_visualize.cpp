@@ -78,7 +78,7 @@ bool ReadSTLFile::ReadBinary(const char* buffer)
             pointList.push_back(Point3f(x, y, z));
             tmppoints.at<float>(0, i) = x;
             tmppoints.at<float>(1, i) = y;
-            tmppoints.at<float>(2, i) = z;
+            tmppoints.at<float>(2, i) = -z;
         }  
         p += 2;//跳过尾部标志
     }
