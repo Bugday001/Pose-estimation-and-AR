@@ -1,3 +1,0 @@
-img/image/a1
-img/image/a2
-img/image/a3
