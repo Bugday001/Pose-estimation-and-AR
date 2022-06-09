@@ -6,7 +6,7 @@
 #include "SomeCameraFuction.h"
 #include "HarrisCorner.h"
 #include "stl_visualize.h"
-
+#include "PointsCloud.h"
 using namespace cv;
 using namespace std;
 
@@ -18,9 +18,9 @@ void testGenerateCalibrationPicture()
 //在线实时标定
 void testCalibrateCameraRealTime()
 {
-	int boardWidth = 6;
-	int boardHeight = 4;
-	float squareSize = 29;
+	int boardWidth = 9;
+	int boardHeight = 6;
+	float squareSize = 19.5;
 	int numBoards = 15;
 	cv::Size boardSize = cv::Size(boardWidth, boardHeight);
 	std::cout << "boardWidth: " << boardWidth << std::endl;
@@ -41,17 +41,17 @@ void testSaveChessboardImages()
 void testCalibrateCameraOffLine()
 {
 	// 棋盘格的尺寸（宽6，高9）
-	const Size patternSize(6, 4);
+	const Size patternSize(9, 6);
 	// 黑方格的大小 20mm
-	const float squareSize = 29;
+	const float squareSize = 19.5;
 	// 图片路径
-	cv::String imagePath = "./ChessboardImages/*.png";
+	cv::String imagePath = "./img/image/*.png";
 	calibrateCameraOffLine(imagePath, patternSize, squareSize);
 }
 //实时显示相机画面，按键保存图片
 void testSaveCameraImages()
 {
-	string savePath("image");
+	string savePath("img/image");
 	saveCameraImages(savePath);
 }
 //实时显示相机画面
@@ -89,13 +89,12 @@ int main(int argc, char **argv) {
 	//testUndistortRectifyImkage();
 	//testDisplayCameraRealTime();
 	//testSaveCameraImages();
-	// Aruco Pose Opencv
-	//detectPoseShow();
 	//CornerDetect();
 	//read stl
 	ReadSTLFile STL;
 	STL.ReadFile("img/huosai.STL");
 	detectPoseShow(STL);
-	system("pause");
+	//PointsCloud();
+	//system("pause");
 	return 0;
 }

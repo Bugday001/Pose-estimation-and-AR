@@ -108,7 +108,7 @@ int displayCameraRealTime()
 int saveCameraImages(string savePath)
 {
 	//1.从摄像头读入视频
-	VideoCapture capture(0);
+	VideoCapture capture(1);
 	if (!capture.isOpened()) {
 		std::cout << "无法开启摄像头！" << std::endl;
 		return -1;
@@ -304,7 +304,7 @@ runCalibrationSave(float squareSize, const Size boardSize, const Size image_size
 */
 int calibrateCameraRealTime(int numBoards, cv::Size boardSize, float squareSize, int delay, bool flipHorizontal)
 {
-	cv::VideoCapture capture(0);
+	cv::VideoCapture capture(1);
 	if (!capture.isOpened()) {
 		std::cout << "无法开启摄像头！" << std::endl;
 		return -1;

@@ -1,5 +1,5 @@
 #include "PoseDetectAruco.h"
-#include "detectMarkers.h"
+
 
 using namespace cv;
 using namespace std;
@@ -36,19 +36,10 @@ int detectPoseShow(ReadSTLFile STL)
         Mat cam;
         capture >> cam;//»ñÈ¡µ±Ç°Ö¡Í¼Ïñ
 
-        cv::Mat test_image, detect_image;
+        cv::Mat test_image;
         cv::resize(cam, test_image, cv::Size(800, 600));
-
         //cv::imshow("test_image", test_image);
-
-        vector<vector<Point2f>> corners;
-        vector<int> ids;
-        auto myDictionary = myGetPredefinedDictionary();
-        myMarkerDetector(test_image, myDictionary, corners, ids);
-        myMarkerDrawer(test_image, corners, ids, cameraMatrix, distCoeffs);
-
-        // ¼ì²âmarker,opencvº¯Êý
-        /*auto dictionary = cv::aruco::getPredefinedDictionary(
+        auto dictionary = cv::aruco::getPredefinedDictionary(
             cv::aruco::PREDEFINED_DICTIONARY_NAME::DICT_6X6_50);
         std::vector<std::vector<cv::Point2f>> corners, rejectedImgPoints;
         std::vector<int> ids;
@@ -56,7 +47,7 @@ int detectPoseShow(ReadSTLFile STL)
         cv::aruco::detectMarkers(test_image, dictionary, corners, ids, parameters,
             rejectedImgPoints);
         cv::aruco::drawDetectedMarkers(test_image, corners, ids,
-            cv::Scalar(0, 255, 0));*/
+            cv::Scalar(0, 255, 0));
 
 
         // ×ËÌ¬¼ìËã,opencvº¯Êý
