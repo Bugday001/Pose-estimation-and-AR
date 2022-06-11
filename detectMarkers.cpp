@@ -284,7 +284,7 @@ void myMarkerDetector(Mat img, vector<vector<int>> dictionary, vector<vector<Poi
 	img_copy = myAdaptiveThreshold(img_copy, 20, 5);
 
 	vector<vector<Point2f>> candidates;
-	candidates = findSquares(img_copy, 0.7, 0.1, 6.0, 0.03, 0.01);
+	candidates = findSquares(img_copy, 0.7, 0.1, 10.0, 0.03, 0.01);
 
 	//drawContours(img_copy, candidates);
 	//imshow("2", img_copy);

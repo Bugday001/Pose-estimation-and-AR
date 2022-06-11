@@ -118,13 +118,19 @@ void Visualize2d_plus(Mat& test_image, Mat new_image, Mat cameraMatrix,
 }
 
 
-/*
-* 立体显示stl模型
+/**@brife 显示STL读取的模型
+* @param test_image     用于显示的图像Mat
+* @param model			STL模型读取的三角面角点
+* @param cameraMatrix   相机内参
+* @param distCoeffs     相机畸变参数
+* @param tvec			旋转向量
+* @param R				旋转矩阵
 */
 void Visualize3d(Mat& test_image, Mat model, Mat cameraMatrix,
 	Mat distCoeffs, vector<cv::Vec3d> tvec, Mat R)
 {
-	float ratio = 200;
+	//缩放倍数
+	float ratio = 800;
 
 	//变换3f=>2f
 	Mat tmpM = Mat::zeros(3, 4, CV_32F), M, tmpMat, Zero1 = (Mat_<double>(1, 4) << 0, 0, 0, 1);

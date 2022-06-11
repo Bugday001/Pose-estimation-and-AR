@@ -2,9 +2,14 @@
 
 
 /*
- *   得到旋转矩阵和位置矩阵，目前假设corners只有一组4个
- *   @param corners 4个点的x，y
- *   @param cameraMatrix 相机内参
+ * 得到旋转矩阵和位置矩阵，目前假设corners只有一组4个
+ * @param corners           4个点的x，y
+ * @param markerLength      Aruco实际尺寸，米
+ * @param cameraMatrix      相机内参
+ * @param distCoeffs        相机畸变参数
+ * @param rvecs             旋转向量
+ * @param tvecs             平移向量
+ * @param R                 旋转矩阵
 */
 void estimatePose(ArrayofArray corners, float markerLength, cv::Mat cameraMatrix, 
                 cv::Mat distCoeffs, Array3d &rvecs, Array3d &tvecs, cv::Mat& R)
@@ -42,7 +47,8 @@ void estimatePose(ArrayofArray corners, float markerLength, cv::Mat cameraMatrix
         cv::Mat c3 = c1.cross(c2);
         cv::Mat tvec;
         //归一，使画出来的轴在合适的大小
-        normalize(M.col(2), tvec, 1.0, 0.0, cv::NORM_INF);
+        //normalize(M.col(2), tvec, 1.0, 0.0, cv::NORM_INF);
+        tvec = M.col(2);
         tvecs.push_back(tvec);
         //cv::Mat R(3, 3, CV_64F);
         for (int i = 0; i < 3; i++)
@@ -64,8 +70,9 @@ void estimatePose(ArrayofArray corners, float markerLength, cv::Mat cameraMatrix
 }
 
 
-/*
-*得到单应矩阵
+/**@brife 得到单应矩阵
+* @param src      标记点的实际坐标
+* @param dst      相机上的坐标
 */
 cv::Mat HomographyMat(ArrayPoint2f src, ArrayPoint2f dst)
 {
@@ -106,4 +113,49 @@ cv::Mat HomographyMat(ArrayPoint2f src, ArrayPoint2f dst)
     cv::SVDecomp(A, w, u, vt, cv::SVD::MODIFY_A | cv::SVD::FULL_UV);
 
     return vt.row(8).reshape(0, 3);
+}
+
+/**@brife 去畸变
+* @param src            原始图像
+* @param dst            去畸变后图像
+* @param cameraMatrix   内参矩阵
+* @param distCoeffs     畸变系数
+*/
+void Undistortion(cv::Mat src, cv::Mat& dst, cv::Mat cameraMatrix, cv::Mat distCoeffs)
+{
+    // 畸变参数
+    double k1 = distCoeffs.at<double>(0,0), k2 = distCoeffs.at<double>(0, 1),
+            p1 = distCoeffs.at<double>(0, 2), p2 = distCoeffs.at<double>(0, 3);
+    // 内参
+    double fx = cameraMatrix.at<double>(0, 0), fy = cameraMatrix.at<double>(1, 1), 
+            cx = cameraMatrix.at<double>(0, 2), cy = cameraMatrix.at<double>(1, 2);
+
+    int rows = src.rows, cols = src.cols;
+
+    // 计算去畸变后图像的内容
+    for (int v = 0; v < rows; v++)
+        for (int u = 0; u < cols; u++) {
+
+            double u_distorted = 0, v_distorted = 0;
+
+            double x1, y1, x2, y2;
+            x1 = (u - cx) / fx;
+            y1 = (v - cy) / fy;
+            double r2;
+            r2 = x1*x1 + y1*y1;
+            //按公式计算
+            x2 = x1 * (1 + k1 * r2 + k2 * r2 * r2) + 2 * p1 * x1 * y1 + p2 * (r2 + 2 * x1 * x1);
+            y2 = y1 * (1 + k1 * r2 + k2 * r2 * r2) + p1 * (r2 + 2 * y1 * y1) + 2 * p2 * x1 * y1;
+
+            u_distorted = fx * x2 + cx;
+            v_distorted = fy * y2 + cy;
+
+            // 赋值 (最近邻插值)
+            if (u_distorted >= 0 && v_distorted >= 0 && u_distorted < cols && v_distorted < rows) {
+                dst.at<cv::Vec3b>(v, u) = src.at<cv::Vec3b>((int)v_distorted, (int)u_distorted);
+            }
+        }
+
+    // 画图去畸变后图像
+    //cv::imshow("image undistorted", dst);
 }
