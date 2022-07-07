@@ -1,5 +1,11 @@
 # Pose-estimation-and-AR
 
+## 实际效果
+
+|  ply模型   | stl模型  |
+|  :----:  | :----: |
+| <img src = "doc/ply.png"  width = 300px> | <img src = "doc/stl.png"  width = 300px> |
+
 ## 目录结构
 - src
     - main.cpp                  主程序入口
