@@ -6,6 +6,8 @@
 |  :----:  | :----: |
 | <img src = "doc/ply.png"  width = 300px> | <img src = "doc/stl.png"  width = 300px> |
 
+[演示视频](https://www.bilibili.com/video/BV1oB4y1a7cD/)
+
 ## 目录结构
 - src
     - main.cpp                  主程序入口
